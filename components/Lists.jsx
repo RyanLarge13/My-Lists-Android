@@ -68,7 +68,7 @@ const Lists = ({ setLoading, user, setUser, online }) => {
     if (!!online) {
       setLoading(true);
       setModal(false);
-      Axios.patch("http://localhost:8080/lists/add", newList, {
+      Axios.patch("https://my-lists-android-production.up.railway.app/lists/add", newList, {
         timeout: 8000,
         headers: {
           Authorization: user.id.toString(),

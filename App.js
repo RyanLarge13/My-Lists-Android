@@ -80,7 +80,9 @@ export default function App() {
         .then((res, err) => {
           if (res) {
             const storedUser = JSON.parse(res);
-            Axios.get(`http://localhost:8080/sync/${storedUser.id}`)
+            Axios.get(
+              `https://my-lists-android-production.up.railway.app/sync/${storedUser.id}`
+            )
               .then((res) => {
                 AsyncStorage.setItem("user", JSON.stringify(res.data.user));
                 setUser(res.data.user);
@@ -116,7 +118,7 @@ export default function App() {
     setUser(newUser);
     setLoading(false);
     Axios.post(
-      "http://localhost:8080/update",
+      "https://my-lists-android-production.up.railway.app/update",
       { newLists: mergedLists },
       {
         headers: {
@@ -157,6 +159,7 @@ export default function App() {
         }, 1000);
       })
       .catch((err) => {
+      	console.log(err)
         AsyncStorage.setItem("user", JSON.stringify(currentUser));
         setUser(currentUser);
         setLoading(false);
@@ -303,7 +306,7 @@ export default function App() {
     }
     if (!!online) {
       setLoading(true);
-      Axios.post("http://localhost:8080/signup", {
+      Axios.post("https://my-lists-android-production.up.railway.app/signup", {
         username,
         email,
         password,
@@ -381,7 +384,7 @@ export default function App() {
   };
 
   const logout = () => {
-    AsyncStorage.removeItem("user");
+    !!online && AsyncStorage.removeItem("user");
     setUser(false);
     setLogin(true);
     toast("success", "You have successfully logged out!", null);

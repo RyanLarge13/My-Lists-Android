@@ -36,7 +36,7 @@ const Settings = ({
     if (!!online) {
       loading(true);
       Axios.put(
-        "http://localhost:8080/user/username/update",
+        "https://my-lists-android-production.up.railway.app/user/username/update",
         { newUsername },
         { headers: { Authorization: user.id.toString() } }
       )
@@ -71,7 +71,7 @@ const Settings = ({
     if (!!online) {
       loading(true);
       Axios.put(
-        "http://localhost:8080/user/email/update",
+        "https://my-lists-android-production.up.railway.app/user/email/update",
         { newEmail },
         { headers: { Authorization: user.id.toString() } }
       )
@@ -105,7 +105,7 @@ setSettings(false);
     }
     if (!!online) {
       loading(true);
-      Axios.delete(`http://localhost:8080/user/${user.id}`, {
+      Axios.delete(`https://my-lists-android-production.up.railway.app/user/${user.id}`, {
         headers: { Authorization: user.id.toString() },
       })
         .then((res) => {

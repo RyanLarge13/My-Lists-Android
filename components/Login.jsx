@@ -72,7 +72,7 @@ const Login = ({ online, setLoading, setUser, setLogin }) => {
     }
     if (!!online) {
       setLoading(true);
-      Axios.post("http://localhost:8080/login", {
+      Axios.post("https://my-lists-android-production.up.railway.app/login", {
         username,
         password,
       })

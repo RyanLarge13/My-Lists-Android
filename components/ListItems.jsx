@@ -80,7 +80,7 @@ const ListItems = ({
         });
     }
     if (!!online) {
-      Axios.post("http://localhost:8080/listitem/add", newItem, {
+      Axios.post("https://my-lists-android-production.up.railway.app/listitem/add", newItem, {
         headers: {
           Authorization: user.id.toString(),
         },
@@ -169,7 +169,7 @@ const ListItems = ({
     }
     if (!!online) {
       Axios.patch(
-        "http://localhost:8080/listitem/update/complete",
+        "https://my-lists-android-production.up.railway.app/listitem/update/complete",
         {
           listId: listId,
           itemId: item._id,
@@ -245,7 +245,7 @@ const ListItems = ({
     }
     if (!!online) {
       Axios.patch(
-        "http://localhost:8080/listitem/new/body",
+        "https://my-lists-android-production.up.railway.app/listitem/new/body",
         {
           listId: listId,
           itemId: itemId,
@@ -321,7 +321,7 @@ const ListItems = ({
     }
     if (!!online) {
       Axios.delete(
-        `http://localhost:8080/listitem/remove/${listId}/${itemId}`,
+        `https://my-lists-android-production.up.railway.app/listitem/remove/${listId}/${itemId}`,
         {
           headers: { Authorization: user.id.toString() },
         }

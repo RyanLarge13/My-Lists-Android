@@ -48,7 +48,7 @@ const ModalList = ({
     }
     if (!!online) {
       setLoading(true);
-      Axios.delete(`http://localhost:8080/lists/remove/${list._id}`, {
+      Axios.delete(`https://my-lists-android-production.up.railway.app/lists/remove/${list._id}`, {
         headers: { Authorization: user.id.toString() },
       })
         .then((res) => {
@@ -105,7 +105,7 @@ const ModalList = ({
     }
     if (!!online) {
       Axios.patch(
-        `http://localhost:8080/lists/update/${title}/${list._id}`,
+        `https://my-lists-android-production.up.railway.app/lists/update/${title}/${list._id}`,
         {},
         { headers: { Authorization: user.id.toString() } }
       )
@@ -176,7 +176,7 @@ const ModalList = ({
     if (!!online) {
       setSelectedColor(color);
       Axios.post(
-        `http://localhost:8080/lists/update/color/${list._id}`,
+        `https://my-lists-android-production.up.railway.app/lists/update/color/${list._id}`,
         { color },
         { headers: { Authorization: user.id.toString() } }
       )
