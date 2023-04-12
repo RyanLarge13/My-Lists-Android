@@ -140,7 +140,7 @@ export default function App() {
       setLogin(true);
       return toast("error", "Please Log Back In");
     }
-    Axios.post("http://localhost:8080/signup", {
+    Axios.post("https://my-lists-android-production.up.railway.app/signup", {
       username: currentUser.username,
       email: currentUser.email,
       password: currentUser.password,
@@ -178,9 +178,12 @@ export default function App() {
         }
         if (res) {
           const currentUser = JSON.parse(res);
-          Axios.get("http://localhost:8080/update", {
-            headers: { Authorization: currentUser.id.toString() },
-          })
+          Axios.get(
+            "https://my-lists-android-production.up.railway.app/update",
+            {
+              headers: { Authorization: currentUser.id.toString() },
+            }
+          )
             .then((response) => {
               return syncUser(response.data.user, currentUser);
             })
