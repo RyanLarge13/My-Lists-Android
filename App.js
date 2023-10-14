@@ -2,15 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
-  TextInput,
   Text,
   View,
   Pressable,
-  Alert,
   Animated,
   Image,
 } from "react-native";
-import ObjectId from "bson-objectid";
 import NetInfo from "@react-native-community/netinfo";
 import Spinner from "react-native-loading-spinner-overlay";
 import Icon from "react-native-vector-icons/Entypo";
@@ -20,15 +17,13 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "axios";
 import Login from "./components/Login";
+import Signup from "./components/Signup";
 import Lists from "./components/Lists";
 import Settings from "./components/Settings";
 
 export default function App() {
   const [user, setUser] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [login, setLogin] = useState(false);
   const [online, setOnline] = useState(false);
   const [tries, setTries] = useState(0);
@@ -46,13 +41,11 @@ export default function App() {
   };
 
   useEffect(() => {
-    //AsyncStorage.removeItem("user");
     setLoading(true);
     NetInfo.addEventListener((state) => {
       if (state.isConnected) {
         setOnline(state.isConnected);
         getOnlineAccount();
-        //getChanges();
       }
       if (!state.isConnected) {
         setOnline(false);
@@ -73,31 +66,6 @@ export default function App() {
       useNativeDriver: true,
     });
   }, []);
-
-  const getChanges = () => {
-    setInterval(() => {
-      AsyncStorage.getItem("user")
-        .then((res, err) => {
-          if (res) {
-            const storedUser = JSON.parse(res);
-            Axios.get(
-              `https://my-lists-android-production.up.railway.app/sync/${storedUser.id}`
-            )
-              .then((res) => {
-                AsyncStorage.setItem("user", JSON.stringify(res.data.user));
-                setUser(res.data.user);
-                toast("success", res.data.message, null);
-              })
-              .catch((err) => {
-                console.log(err.response);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 10000);
-  };
 
   const syncUser = (fetchedUser, storedUser) => {
     let set = new Set();
@@ -159,7 +127,7 @@ export default function App() {
         }, 1000);
       })
       .catch((err) => {
-      	console.log(err)
+        console.log(err);
         AsyncStorage.setItem("user", JSON.stringify(currentUser));
         setUser(currentUser);
         setLoading(false);
@@ -228,11 +196,9 @@ export default function App() {
         }
         if (res) {
           const currentUser = JSON.parse(res);
-          if (!online) {
-            setUser(currentUser);
-            setLoading(false);
-            toast("success", "You Are offline!", null);
-          }
+          setUser(currentUser);
+          setLoading(false);
+          toast("success", "You Are offline!", null);
         }
       })
       .catch((err) => {
@@ -243,144 +209,6 @@ export default function App() {
         toast("error", "Something Went wrong, try signing in again");
         setTries((prev) => prev + 1);
       });
-  };
-
-  const signup = () => {
-    const newUser = {
-      id: ObjectId.createFromTime(new Date().getSeconds()),
-      username,
-      email,
-      password,
-      lists: [],
-    };
-    if (!online) {
-      AsyncStorage.getItem("user")
-        .then((res, err) => {
-          if (err || !res) {
-            AsyncStorage.setItem("user", JSON.stringify(newUser));
-            setUser(user);
-            toast(
-              "success",
-              "New Account Created!",
-              `please sign in ${newUser.username}`
-            );
-            setLogin(true);
-          }
-          if (res) {
-            const storedUser = JSON.parse(res);
-            if (
-              username === storedUser.username ||
-              email === storedUser.email ||
-              password === storedUser.password
-            ) {
-              setLogin(true);
-              toast(
-                "error",
-                "Your account already exsists",
-                `Please login ${storedUser.username}`
-              );
-            }
-            if (
-              username !== storedUser.username ||
-              email !== storedUser.email ||
-              password !== storedUser.password
-            ) {
-              toast(
-                "error",
-                "An Account Already Exsists",
-                `please sign in as ${storedUser.username}`
-              );
-              setLogin(true);
-            }
-          }
-        })
-        .catch((err) => {
-          AsyncStorage.setItem("user", JSON.stringify(newUser));
-          setUser(user);
-          toast(
-            "auccess",
-            "New Account Created!",
-            `please login ${newUser.username}`
-          );
-        });
-    }
-    if (!!online) {
-      setLoading(true);
-      Axios.post("https://my-lists-android-production.up.railway.app/signup", {
-        username,
-        email,
-        password,
-      })
-        .then((res) => {
-          toast(
-            "success",
-            "Your New Account Was Created!",
-            `You can now login ${username}`
-          );
-          setLoading(false);
-          setTimeout(() => {
-            setLogin(true);
-          }, 1000);
-        })
-        .catch((err) => {
-          if (err.response) {
-            setLoading(false);
-            toast("error", err.response.data.message);
-          }
-          if (!err.repsonse) {
-            setLoading(false);
-            AsyncStorage.getItem("user")
-              .then((res, err) => {
-                if (err || !res) {
-                  AsyncStorage.setItem("user", JSON.stringify(newUser));
-                  setUser(user);
-                  setLogin(true);
-                  toast(
-                    "success",
-                    "New Account Created!",
-                    `please login ${newUser.username}`
-                  );
-                }
-                if (res) {
-                  const storedUser = JSON.parse(res);
-                  if (
-                    username === storedUser.username ||
-                    email === storedUser.email ||
-                    password === storedUser.password
-                  ) {
-                    setLogin(true);
-                    toast(
-                      "error",
-                      "Your account already exsists",
-                      `Please login ${storedUser.username}`
-                    );
-                  }
-                  if (
-                    username !== storedUser.username ||
-                    email !== storedUser.email ||
-                    password !== storedUser.password
-                  ) {
-                    toast(
-                      "error",
-                      "An Account Already Exsists",
-                      `please sign in as ${storedUser.username}`
-                    );
-                    setLogin(true);
-                  }
-                }
-              })
-              .catch((err) => {
-                AsyncStorage.setItem("user", JSON.stringify(newUser));
-                setUser(user);
-                toast(
-                  "auccess",
-                  "New Account Created!",
-                  `please sign in ${newUser.username}`
-                );
-              });
-          }
-        });
-    }
   };
 
   const logout = () => {
@@ -406,7 +234,7 @@ export default function App() {
           <>
             <Pressable
               onPress={() => setLogin((prev) => !prev)}
-              style={styles.loginBtn}
+              style={!login ? styles.loginBtn : styles.signupBtn}
             >
               <Icon
                 name={
@@ -421,28 +249,11 @@ export default function App() {
               </Text>
             </Pressable>
             {!login ? (
-              <Animated.View style={{ translateY: slideIn }}>
-                <View style={styles.textInputs}>
-                  <TextInput
-                    onChangeText={(text) => setUsername(text)}
-                    style={styles.input}
-                    placeholder="Username"
-                  />
-                  <TextInput
-                    onChangeText={(text) => setEmail(text)}
-                    style={styles.input}
-                    placeholder="Email"
-                  />
-                  <TextInput
-                    onChangeText={(text) => setPassword(text)}
-                    style={styles.input}
-                    placeholder="Password"
-                  />
-                </View>
-                <Ripple onPress={() => signup()} style={styles.submit}>
-                  <Text>Signup</Text>
-                </Ripple>
-              </Animated.View>
+              <Signup
+                setUser={setUser}
+                setLoading={setLoading}
+                setLogin={setLogin}
+              />
             ) : (
               <Login
                 online={online}
@@ -492,31 +303,15 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  textInputs: {
-    marginBottom: 50,
-  },
-  input: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-    paddingVertical: 8,
-    textAlign: "center",
-    elevation: 5,
-    borderRadius: 5,
-    backgroundColor: "#fff",
-  },
-  submit: {
-    marginBottom: 100,
-    marginHorizontal: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 5,
-    backgroundColor: "#f210f7",
-    elevation: 5,
-  },
   loginBtn: {
     position: "absolute",
     top: 50,
     right: 50,
+  },
+  signupBtn: {
+    position: "absolute",
+    top: 50,
+    left: 50,
   },
   loginIcon: {
     fontSize: 30,

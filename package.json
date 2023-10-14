@@ -18,12 +18,15 @@
     "expo-system-ui": "^2.2.1",
     "link": "^1.5.1",
     "react": "18.2.0",
-    "react-native": "^0.71.6",
+    "react-native": "0.71.13",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-material-ripple": "^0.9.1",
     "react-native-toast-message": "^2.1.6",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-web": "~0.18.10",
+    "react-dom": "18.2.0",
+    "@expo/webpack-config": "^18.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

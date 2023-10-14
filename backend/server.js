@@ -23,32 +23,6 @@ app.use("/", userRouter);
 app.use("/lists", listsRouter);
 app.use("/listitem", listItemsRouter);
 
-app.get("/sync/:userId", (req, res) => {
-  const id = req.params.userId;
-  /*const pipeline = [
-    { $match: { "fullDocument._id": id } },
-    { fullDocument: "updateLookup" },
-  ];*/
-  const changeStream = User.watch({ fullDocument: "updateLookup" });
-  changeStream.on("change", (next) => {
-    const updatedUser = next.fullDocument;
-    if (updatedUser._id.toString() === id && next) {
-      const syncedUser = {
-        id: updatedUser._id,
-        username: updatedUser.username,
-        email: updatedUser.email,
-        lists: updatedUser.lists,
-      };
-      return res
-        .status(201)
-        .json({ message: "Synced Recent Change", user: syncedUser });
-    } else {
-      changeStream.close();
-      return console.log("no match");
-    }
-  });
-});
-
 app.get("/update", auth, (req, res) => {
   const id = req.headers.authorization;
   User.findOne({ _id: id })

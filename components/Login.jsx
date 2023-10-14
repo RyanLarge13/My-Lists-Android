@@ -37,6 +37,13 @@ const Login = ({ online, setLoading, setUser, setLogin }) => {
   }, []);
 
   const login = () => {
+    if (!username || !password) {
+      return toast(
+        "error",
+        "Incomplete form",
+        `Please fill out the form below to login`
+      );
+    }
     if (!online) {
       AsyncStorage.getItem("user")
         .then((res, err) => {
