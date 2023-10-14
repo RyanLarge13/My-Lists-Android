@@ -181,16 +181,19 @@ const Signup = ({ setUser, setLoading, setLogin }) => {
           onChangeText={(text) => setUsername(text)}
           style={styles.input}
           placeholder="Username"
+          keyboardType="default"
         />
         <TextInput
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
           placeholder="Email"
+          keyboardType="email-address"
         />
         <TextInput
           onChangeText={(text) => setPassword(text)}
           style={styles.input}
           placeholder="Password"
+          secureTextEntry={true}
         />
       </View>
       <Ripple onPress={() => signup()} style={styles.submit}>

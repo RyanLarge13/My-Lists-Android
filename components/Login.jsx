@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  Animated,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Animated } from "react-native";
 import Ripple from "react-native-material-ripple";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -71,7 +64,6 @@ const Login = ({ online, setLoading, setUser, setLogin }) => {
         .catch((err) => {
           if (tries === 1) {
             return toast("error", "Please Reload The App");
-            setTries(0);
           }
           toast("error", "Something Went Wrong Please Try Again", null);
           setTries((prev) => prev + 1);
@@ -115,34 +107,6 @@ const Login = ({ online, setLoading, setUser, setLogin }) => {
     }
   };
 
-  const sync = (fetchedUser, currentUser) => {
-    const fetchedLists = fetchedUser.lists;
-    const currentLists = currentUser.lists;
-
-    const unmatchedLists = fetchedLists.filter(
-      (fetchedList) =>
-        !currentLists.some(
-          (currentList) => currentList.title === fetchedList.title
-        )
-    );
-    const unmatchedItems = fetchedLists.filter(
-      (fetchedList) =>
-        !currentLists.some((currentList) =>
-          fetchedList.listItems.filter(
-            (fetchedItem) =>
-              !currentList.listItems.some(
-                (currentItem) => currentItem.body === fetchedItem.body
-              )
-          )
-        )
-    );
-    currentUser.lists.push(unmatchedLists);
-    AsyncStorage.setItem("user", currentUser);
-    setUser(currentUser);
-    setLoading(false);
-    toast("success", "Synced");
-  };
-
   return (
     <Animated.View style={{ translateY: slideIn }}>
       <View style={styles.textInputs}>
@@ -150,11 +114,13 @@ const Login = ({ online, setLoading, setUser, setLogin }) => {
           onChangeText={(text) => setUsername(text)}
           style={styles.input}
           placeholder="Username"
+          keyboardType="default"
         />
         <TextInput
           onChangeText={(text) => setPassword(text)}
           style={styles.input}
           placeholder="Password"
+          secureTextEntry={true}
         />
       </View>
       <Ripple onPress={() => login()} style={styles.submit}>

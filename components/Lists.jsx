@@ -68,12 +68,16 @@ const Lists = ({ setLoading, user, setUser, online }) => {
     if (!!online) {
       setLoading(true);
       setModal(false);
-      Axios.patch("https://my-lists-android-production.up.railway.app/lists/add", newList, {
-        timeout: 8000,
-        headers: {
-          Authorization: user.id.toString(),
-        },
-      })
+      Axios.patch(
+        "https://my-lists-android-production.up.railway.app/lists/add",
+        newList,
+        {
+          timeout: 8000,
+          headers: {
+            Authorization: user.id.toString(),
+          },
+        }
+      )
         .then((res) => {
           setSelectedColor(null);
           setUser(res.data.user);
@@ -108,6 +112,37 @@ const Lists = ({ setLoading, user, setUser, online }) => {
     setList(list);
     setOptionsModal(true);
     setLoading(false);
+  };
+
+  const sync = async () => {
+    if (!online) {
+      return toast(
+        "error",
+        "Offline",
+        "You are not online and cannot sync changes"
+      );
+    }
+    setLoading(true);
+    const fetchedUser = await getUpdatedUser();
+    setUser(fetchedUser);
+    setLoading(false);
+    toast("success", "Synced");
+  };
+
+  const getUpdatedUser = () => {
+    const res = Axios.get(
+      "https://my-lists-android-production.up.railway.app/update",
+      { headers: { Authorization: user.id.toString() } }
+    )
+      .then((res) => {
+        if (res) {
+          return res.data.user;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return res;
   };
 
   return (
@@ -219,6 +254,9 @@ const Lists = ({ setLoading, user, setUser, online }) => {
       <Ripple onPress={() => setModal(true)} style={styles.addBtn}>
         <Icon name="pluscircle" style={styles.addIcon} />
       </Ripple>
+      <Ripple onPress={() => sync()} style={styles.syncBtn}>
+        <Icon name="sync" style={styles.syncIcon} />
+      </Ripple>
     </>
   );
 };
@@ -238,6 +276,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   addIcon: {
+    fontSize: 30,
+    color: "#fff",
+  },
+  syncBtn: {
+    position: "absolute",
+    bottom: 7,
+    left: 7,
+    padding: 15,
+    borderRadius: 5,
+    backgroundColor: "#000",
+  },
+  syncIcon: {
     fontSize: 30,
     color: "#fff",
   },
