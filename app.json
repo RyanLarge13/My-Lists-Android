@@ -8,7 +8,7 @@
     "userInterfaceStyle": "dark",
     "primaryColor": "#000000",
     "splash": {
-      "image": "./assets/bg.png",
+      "image": "./assets/splashImage.png",
       "resizeMode": "cover",
       "backgroundColor": "#000000"
     },
