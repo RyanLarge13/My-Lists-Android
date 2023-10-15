@@ -253,6 +253,7 @@ export default function App() {
                 setUser={setUser}
                 setLoading={setLoading}
                 setLogin={setLogin}
+                online={online}
               />
             ) : (
               <Login

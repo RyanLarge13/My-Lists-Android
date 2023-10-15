@@ -4,8 +4,9 @@ import Toast from "react-native-toast-message";
 import Ripple from "react-native-material-ripple";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "axios";
+import ObjectID from "bson-objectid";
 
-const Signup = ({ setUser, setLoading, setLogin }) => {
+const Signup = ({ setUser, setLoading, setLogin, online }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +39,7 @@ const Signup = ({ setUser, setLoading, setLogin }) => {
       );
     }
     const newUser = {
-      id: ObjectId.createFromTime(new Date().getSeconds()),
+      id: ObjectID.createFromTime(new Date().getSeconds()),
       username,
       email,
       password,
