@@ -12,19 +12,30 @@
       "resizeMode": "cover",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
+<<<<<<< Updated upstream
         "foregroundImage": "./assets/adaptiveIcon.png",
         "backgroundColor": "#000000"
+=======
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+>>>>>>> Stashed changes
       },
       "package": "com.ryanlarge.MyLists"
     },
     "web": {
+<<<<<<< Updated upstream
       "favicon": "./assets/icon.png"
+=======
+      "favicon": "./assets/favicon.png"
+>>>>>>> Stashed changes
     },
     "extra": {
       "eas": {
